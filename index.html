@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#243c37">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="عارف">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>خیاطی و پارچه‌فروشی عارف</title>
+<style>
+:root{--green:#243c37;--gold:#b99b68;--cream:#f3eee4;--ink:#26332f;--muted:#817968;--line:#e3d9c8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 10% 0%,#fffaf0 0,#f3eee4 48%,#e9e0d2 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;padding:16px;max-width:720px;margin:auto}
+header{background:linear-gradient(135deg,#1e352f,#36564b);color:#f7eddb;border-radius:22px;padding:23px 18px;text-align:center;box-shadow:0 12px 30px #243c3726;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;inset:8px;border:1px solid #c8ad7b66;border-radius:16px;pointer-events:none}
+h1{margin:0;font-size:27px;letter-spacing:.4px}header p{margin:7px 0 0;color:#dfcfad;font-size:12px;letter-spacing:1.5px}
+.card{background:#fffdf9eF;border:1px solid #e8dece;border-radius:18px;padding:17px;margin-top:15px;box-shadow:0 5px 18px #54442b0c}
+h2{font-size:18px;color:var(--green);margin:0 0 14px}
+label{display:block;font-size:13px;color:#746a59;margin:10px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;font-size:15px;min-height:44px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.measure{display:grid;grid-template-columns:1fr auto 76px auto;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #eee7dc}
+.measure:last-child{border:0}.measure b{font-size:14px;font-weight:600}
+.value{text-align:center;font-weight:700;font-variant-numeric:tabular-nums;background:#f7f2e9;border:1px solid var(--line);border-radius:10px;padding:10px 2px;direction:ltr}
+.step{border:0;background:#e9e0d2;color:var(--green);border-radius:10px;width:38px;height:38px;font-size:22px}
+.step.plus{background:var(--green);color:white}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+button{font:inherit;cursor:pointer}
+.primary,.secondary,.danger{border:0;border-radius:12px;padding:12px 16px;font-weight:650}
+.primary{background:var(--green);color:white;flex:1}.secondary{background:#eee5d7;color:var(--green)}.danger{background:#f8e7e3;color:#9b382b}
+.search{margin:10px 0}
+.customer{border:1px solid var(--line);border-radius:13px;padding:12px;margin-top:9px;background:#fff}
+.customer strong{color:var(--green)}.customer small{color:var(--muted);display:block;margin-top:4px}
+.note{font-size:12px;line-height:1.8;color:var(--muted)}
+.hidden{display:none!important}
+#toast{position:fixed;bottom:18px;left:16px;right:16px;background:#243c37;color:white;padding:12px;border-radius:12px;text-align:center;display:none;z-index:5}
+@media(max-width:390px){body{padding:10px}.grid{grid-template-columns:1fr}.measure{grid-template-columns:1fr auto 68px auto}}
+@media print{
+ @page{size:80mm auto;margin:4mm}
+ body{background:white;padding:0;max-width:none;color:#111}
+ body>*:not(#printArea){display:none!important}
+ #printArea{display:block!important;font-family:Tahoma,sans-serif;width:100%;font-size:12px;color:#111}
+ #printArea h2{text-align:center;font-size:16px;margin:0 0 5px;color:#111}
+ #printArea .pmeta{border-bottom:1px dashed #555;padding:5px 0;margin-bottom:6px;line-height:1.9}
+ #printArea table{width:100%;border-collapse:collapse}
+ #printArea td{padding:4px 2px;border-bottom:1px dotted #aaa}
+ #printArea td:last-child{text-align:left;direction:ltr;font-weight:bold}
+ #printArea .pmodels{margin-top:8px;line-height:2;border-top:1px dashed #555;padding-top:6px}
+ #printArea .pfoot{text-align:center;margin-top:10px;font-size:10px}
+}
+</style>
+</head>
+<body>
+<header><h1>عارف</h1><p>خیاطی و پارچه‌فروشی · دفتر اندازه‌گیری</p></header>
+
+<section class="card" id="formCard">
+<h2 id="formTitle">ثبت مشتری جدید</h2>
+<div class="grid">
+ <div><label>نام مشتری *</label><input id="name" placeholder="نام مشتری"></div>
+ <div><label>شماره موبایل</label><input id="phone" type="tel" placeholder="شماره تماس"></div>
+</div>
+<label>کد اختصاصی مشتری *</label><input id="code" placeholder="کد را خودتان وارد کنید">
+<div class="card" style="padding:13px;margin-top:14px;background:#fbf8f1">
+<h2 style="font-size:16px">اندازه‌ها · اینچ</h2>
+<div id="measurements"></div>
+</div>
+<div class="card" style="padding:13px;margin-top:12px;background:#fbf8f1">
+<h2 style="font-size:16px">مدل لباس</h2>
+<label>مدل آستین</label><input id="sleeve" placeholder="مثلاً ساده، پفی، کلوش">
+<label>مدل یخن</label><input id="collar" placeholder="مثلاً گرد، هفت، چهارگوش">
+<label>مدل لباس</label><input id="dress" placeholder="مثلاً پیراهن، کرتی، لباس محلی">
+</div>
+<div class="actions">
+ <button class="primary" id="saveBtn">ذخیره مشتری</button>
+ <button class="secondary" id="resetBtn" type="button">پاک‌کردن فرم</button>
+</div>
+<p class="note">اطلاعات در حافظه همین مرورگر و همین دستگاه ذخیره می‌شود. برای جلوگیری از گم‌شدن اطلاعات، هر چند وقت یک‌بار نسخه پشتیبان بگیرید.</p>
+</section>
+
+<section class="card">
+<h2>دفتر مشتریان</h2>
+<input id="search" class="search" placeholder="جست‌وجو با نام، شماره یا کد...">
+<div class="actions">
+ <button class="secondary" id="backupBtn" type="button">گرفتن نسخه پشتیبان</button>
+ <button class="secondary" id="restoreBtn" type="button">بازیابی نسخه پشتیبان</button>
+ <input id="restoreFile" type="file" accept="application/json,.json" class="hidden">
+</div>
+<div id="customerList"></div>
+</section>
+
+<div id="printArea" class="hidden"></div>
+<div id="toast"></div>
+<script>
+const fields=["قد","شانه","آستین","بغل","یخن","قد شلوار","دم پاچه"];
+let editingId=null, customers=[];
+const $=id=>document.getElementById(id);
+function toast(msg){const t=$("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",2300)}
+function load(){try{customers=JSON.parse(localStorage.getItem("aref_tailoring_customers")||"[]")}catch(e){customers=[]}}
+function persist(){localStorage.setItem("aref_tailoring_customers",JSON.stringify(customers));renderList()}
+function makeMeasures(){
+ $("measurements").innerHTML=fields.map((f,i)=>`<div class="measure"><b>${f}</b><button class="step" type="button" data-i="${i}" data-d="-0.5">−</button><div class="value" id="m${i}">0</div><button class="step plus" type="button" data-i="${i}" data-d="0.5">+</button></div>`).join("");
+ $("measurements").addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(!b)return;const el=$("m"+b.dataset.i);el.textContent=Math.max(0,Number(el.textContent)+Number(b.dataset.d)).toFixed(1).replace(/\.0$/,"")});
+}
+function getMeasures(){return Object.fromEntries(fields.map((f,i)=>[f,Number($("m"+i).textContent)]))}
+function setMeasures(obj={}){fields.forEach((f,i)=>$("m"+i).textContent=Number(obj[f]||0).toFixed(1).replace(/\.0$/,""))}
+function clearForm(){editingId=null;["name","phone","code","sleeve","collar","dress"].forEach(id=>$(id).value="");setMeasures();$("formTitle").textContent="ثبت مشتری جدید";$("saveBtn").textContent="ذخیره مشتری"}
+function save(){
+ const name=$("name").value.trim(),code=$("code").value.trim();
+ if(!name||!code){toast("نام و کد مشتری را وارد کنید.");return}
+ if(customers.some(c=>c.code.toLowerCase()===code.toLowerCase()&&c.id!==editingId)){toast("این کد قبلاً ثبت شده است.");return}
+ const old=customers.find(c=>c.id===editingId);
+ const item={id:editingId||String(Date.now()),name,phone:$("phone").value.trim(),code,measure:getMeasures(),sleeve:$("sleeve").value.trim(),collar:$("collar").value.trim(),dress:$("dress").value.trim(),created:old?.created||new Date().toISOString(),updated:new Date().toISOString()};
+ if(editingId)customers=customers.map(c=>c.id===editingId?item:c);else customers.unshift(item);
+ persist();clearForm();toast("اطلاعات مشتری ذخیره شد.");
+}
+function renderList(){
+ const q=$("search").value.trim().toLowerCase(),list=customers.filter(c=>[c.name,c.phone,c.code].some(v=>(v||"").toLowerCase().includes(q)));
+ $("customerList").innerHTML=list.length?list.map(c=>`<div class="customer"><strong>${esc(c.name)}</strong><small>کد: ${esc(c.code)} · ${esc(c.phone||"بدون شماره")}</small><div class="actions"><button class="secondary" onclick="editCustomer('${c.id}')">ویرایش</button><button class="secondary" onclick="printCustomer('${c.id}')">چاپ / PDF</button><button class="danger" onclick="deleteCustomer('${c.id}')">حذف</button></div></div>`).join(""):'<p class="note">هنوز مشتری ثبت نشده است.</p>';
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+window.editCustomer=id=>{const c=customers.find(x=>x.id===id);if(!c)return;editingId=id;$("name").value=c.name;$("phone").value=c.phone;$("code").value=c.code;$("sleeve").value=c.sleeve;$("collar").value=c.collar;$("dress").value=c.dress;setMeasures(c.measure);$("formTitle").textContent="ویرایش اطلاعات مشتری";$("saveBtn").textContent="ذخیره تغییرات";window.scrollTo({top:0,behavior:"smooth"})};
+window.deleteCustomer=id=>{const c=customers.find(x=>x.id===id);if(!c||!confirm("اطلاعات "+c.name+" حذف شود؟"))return;customers=customers.filter(x=>x.id!==id);persist();toast("مشتری حذف شد.")};
+window.printCustomer=id=>{const c=customers.find(x=>x.id===id);if(!c)return;const date=new Date(c.created).toLocaleDateString("fa-IR");$("printArea").innerHTML=`<h2>خیاطی و پارچه‌فروشی عارف</h2><div class="pmeta">نام: ${esc(c.name)}<br>کد: ${esc(c.code)}<br>موبایل: ${esc(c.phone||"—")}<br>تاریخ: ${date}</div><table>${fields.map(f=>`<tr><td>${f}</td><td>${Number(c.measure[f]||0)} اینچ</td></tr>`).join("")}</table><div class="pmodels">مدل آستین: ${esc(c.sleeve||"—")}<br>مدل یخن: ${esc(c.collar||"—")}<br>مدل لباس: ${esc(c.dress||"—")}</div><div class="pfoot">با سپاس · عارف</div>`;window.print()};
+$("saveBtn").addEventListener("click",save);$("resetBtn").addEventListener("click",clearForm);$("search").addEventListener("input",renderList);
+$("backupBtn").addEventListener("click",()=>{
+ const blob=new Blob([JSON.stringify({app:"Aref Tailoring",version:1,customers},null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="aref-customers-backup.json";a.click();URL.revokeObjectURL(url);toast("نسخه پشتیبان آماده شد.");
+});
+$("restoreBtn").addEventListener("click",()=>$("restoreFile").click());
+$("restoreFile").addEventListener("change",async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{const data=JSON.parse(await file.text());if(!Array.isArray(data.customers))throw new Error("invalid");
+ if(!confirm("اطلاعات فعلی با نسخه پشتیبان جایگزین شود؟"))return;
+ customers=data.customers;persist();toast("نسخه پشتیبان بازیابی شد.");
+ }catch(err){toast("فایل پشتیبان معتبر نیست.");}finally{e.target.value=""}
+});
+makeMeasures();load();renderList();
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
+</script>
+</body></html>
